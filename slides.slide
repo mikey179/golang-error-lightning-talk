@@ -1,0 +1,88 @@
+Error handling with Go
+
+8 May 2018
+
+
+Frank Kleine
+
+
+
+@bovigo
+
+* Errors, what are they?
+
+Errors can happen in each stage of the creation and execution of a program.
+
+  Error handling refers to the anticipation, detection, and resolution of
+  programming, application, and communications errors.
+
+From [[https://searchsoftwarequality.techtarget.com/definition/error-handling][What is error handling?]], Margaret Rouse
+
+: Wikipedia offers "Exception handling only" - I don't like that.
+
+* Errors in Go
+
+From the os package, os.Open:
+.code open.go
+
+And in usage it looks something like this:
+.code open_usage.go
+
+Standard library is full of interesting examples. It's always worth to dive into it.
+
+: Built-in error type. Golang.org blog article, a recommended read.
+
+* Your errors
+
+Always add context to an error before returning it.
+.code error_nocontext.go /START OMIT/,/END OMIT/
+vs.
+.code error_context.go /START OMIT/,/END OMIT/
+
+* Errors in non end user functions
+
+- E.g. functions that don't provide direct output to a user of a program.
+- Your backend functions, e.g. repositories, dealing with other services, etc.
+- Functions that most likely don't know how to deal with an error and must return immediately.
+
+* Example: repository function
+
+.code delete_repo.go /START OMIT/,/END OMIT/
+
+* Errors in end user functions
+
+- Functions that must provide direct output to a user
+- E.g. HTTP handlers, main func of a CLI program
+- Function must continue after the error happened to render some helpful output for the user (and hopefully log the error)
+
+* Example: HTTP handler
+
+- Default HTTP handler doesn't offer to return an error
+.code httphandler.go
+- Leads to repetitive code
+- Prevent this by specifying your own HTTP handler
+.code userhttphandler.go /START OMIT/,/END OMIT/
+- And a handler which handles the error
+.code errorhttphandler.go /START OMIT/,/END OMIT/
+
+* User defined handler
+
+.code userhandler.go /START OMIT/,/END OMIT/
+
+* What about pkg/errors?
+
+- A package by Dave Cheney, provides utility functions for working with errors.
+- Adds stack traces to errors
+- Uses chaining of errors, each error can have a cause
+
+It's a great and interesting package. However, I never found the need in my code to add the weight of more code and dependencies for a perceived little gain.
+
+(Disclaimer: Your mileage will vary.)
+
+(Provoking opinion: if you need stack traces your code base in a single artefact is too large. Except when you ship a binary to a customer. Than you want stack traces.)
+
+
+* Links
+
+- [[https://blog.golang.org/error-handling-and-go][Golang.org article about Go error handling]]
+- [[https://github.com/pkg/errors][pkg/errors]]
