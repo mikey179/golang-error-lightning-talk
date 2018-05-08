@@ -3,12 +3,12 @@ import (
 )
 
 // START OMIT
-func readConfig(configFile string) error {
+func readConfig(configFile string) (*Config, error) {
 	f, err := os.Open(configFile)
 	if err != nil {
-		return err
+		return nil err
 	}
-	// do something with the open *File f
+	// do something with the open *File f and return Config
 }
 
 // END OMIT

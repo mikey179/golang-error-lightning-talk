@@ -30,6 +30,8 @@ And in usage it looks something like this:
 
 Standard library is full of interesting examples. It's always worth to dive into it.
 
+See also [[https://blog.golang.org/error-handling-and-go][ Error handling and Go]] by Andrew Gerrand.
+
 : Built-in error type. Golang.org blog article, a recommended read.
 
 * Your errors
@@ -48,6 +50,16 @@ vs.
 * Example: repository function
 
 .code delete_repo.go /START OMIT/,/END OMIT/
+
+* if err != nil cascades
+
+.code nil_cascades_problem.go
+
+* You want to wrap behaviour with a type
+
+.code nil_cascades_solution.go
+
+See also [[https://blog.golang.org/errors-are-values][Errors are values]] by Rob Pike and [[https://www.dotconferences.com/2017/11/john-cinnamond-go-lift][Go Lift]] by John Cinnamond.
 
 * Errors in end user functions
 
@@ -69,6 +81,14 @@ vs.
 
 .code userhandler.go /START OMIT/,/END OMIT/
 
+* Side note: Must()
+
+Some standard library packages provide a Must() function which panics when the wrapped function returns an error:
+
+  var t = template.Must(template.New("name").Parse("html"))
+
+In the startup phase of a program it might be ok. But it is not user friendly if your program is for other users than the original author.
+
 * What about pkg/errors?
 
 - A package by Dave Cheney, provides utility functions for working with errors.
@@ -77,12 +97,15 @@ vs.
 
 It's a great and interesting package. However, I never found the need in my code to add the weight of more code and dependencies for a perceived little gain.
 
-(Disclaimer: Your mileage will vary.)
+Disclaimer: Your mileage will vary. Ideas for cases when you might want to use it:
 
-(Provoking opinion: if you need stack traces your code base in a single artefact is too large. Except when you ship a binary to a customer. Than you want stack traces.)
+- Large code base in one artefact
+- Shipping a binary to a customer in order to receive better error feedback
 
 
 * Links
 
-- [[https://blog.golang.org/error-handling-and-go][Golang.org article about Go error handling]]
+- [[https://blog.golang.org/error-handling-and-go][Andrew Gerrand: Error handling and Go]]
+- [[https://blog.golang.org/errors-are-values][Rob Pike: Errors are values]]
+- [[https://www.dotconferences.com/2017/11/john-cinnamond-go-lift][John Cinnamond: Go Lift]]
 - [[https://github.com/pkg/errors][pkg/errors]]

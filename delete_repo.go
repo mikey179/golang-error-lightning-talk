@@ -6,15 +6,15 @@ import (
 
 // START OMIT
 func Delete(db *sql.DB, theStream *Stream) error {
-	stmt, err := db.Prepare("DELETE FROM streams WHERE path = ?")
+	stmt, err := db.Prepare("DELETE FROM streams WHERE stream_id = ?")
 	if err != nil {
 		return fmt.Errorf("could not prepare DELETE statement: %v", err)
 	}
 
 	defer stmt.Close()
-	_, err = stmt.Exec(theStream.Path)
+	_, err = stmt.Exec(theStream.ID)
 	if err != nil {
-		return fmt.Errorf("could not execute DELETE statement: %v", err)
+		return fmt.Errorf("could not execute DELETE statement for stream %s: %v", stream.ID, err)
 	}
 
 	return nil
