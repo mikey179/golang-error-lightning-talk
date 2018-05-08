@@ -2,7 +2,7 @@ import (
 	"fmt"
 	"net/http"
 )
-// START OMIT
+
 func deleteStream(s Streams, u Upstream) myHttpHandler {
 	return func(w *responseWriter, r *http.Request) (reterr error) {
 		data := map[string]interface{}
@@ -16,8 +16,8 @@ func deleteStream(s Streams, u Upstream) myHttpHandler {
 			w.WriteHeader(http.StatusNotFound)
 			data["title"] = "Not Found"
 			data["error"] = "stream_does_not_exist"
+// START OMIT
 		} else {
-// END OMIT
 			data["title"] = stream.Title
 			nowStreaming, err := u.NowStreaming(stream.Path)
 			if err != nil {
@@ -41,3 +41,5 @@ func deleteStream(s Streams, u Upstream) myHttpHandler {
 		return
 	}
 }
+
+// END OMIT

@@ -81,6 +81,10 @@ See also [[https://blog.golang.org/errors-are-values][Errors are values]] by Rob
 
 .code userhandler.go /START OMIT/,/END OMIT/
 
+* User defined handler, part II
+
+.code userhandler2.go /START OMIT/,/END OMIT/
+
 * Side note: Must()
 
 Some standard library packages provide a Must() function which panics when the wrapped function returns an error:
