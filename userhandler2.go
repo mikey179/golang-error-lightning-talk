@@ -4,7 +4,7 @@ import (
 )
 
 func deleteStream(s Streams, u Upstream) myHttpHandler {
-	return func(w *responseWriter, r *http.Request) (reterr error) {
+	return func(user *User, w *responseWriter, r *http.Request) (reterr error) {
 		data := map[string]interface{}
 		stream, err := s.FindByPath(r.URL.Path)
 		if err != nil {
@@ -16,6 +16,10 @@ func deleteStream(s Streams, u Upstream) myHttpHandler {
 			w.WriteHeader(http.StatusNotFound)
 			data["title"] = "Not Found"
 			data["error"] = "stream_does_not_exist"
+		} else if stream.Owner.Username != user.Name {
+			w.WriteHeader(http.StatusForbidden)
+			data["title"] = "Forbidden"
+			data["error"] = "not_allowed_to_delete_stream"
 // START OMIT
 		} else {
 			data["title"] = stream.Title
